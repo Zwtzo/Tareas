@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Z_U1_271415_E_03</string>
+    <string-array name="status_array">
+        <item>Pendiente</item>
+        <item>En proceso</item>
+        <item>Completado</item>
+    </string-array>
+
+</resources>
