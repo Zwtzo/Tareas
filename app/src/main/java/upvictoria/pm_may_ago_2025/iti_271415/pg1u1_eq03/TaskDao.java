@@ -21,10 +21,11 @@ public interface TaskDao {
     @Update
     void update(Task task);
 
-    @Query("SELECT * FROM Task")
-    List<Task> getAllTasks();
-    @Query("SELECT * FROM Task ORDER BY date ASC")
+    @Query("SELECT * FROM Task ORDER BY CASE WHEN status = 'Completada' THEN 1 ELSE 0 END, date ASC")
     List<Task> getAllTasksSorted();
+
+    @Query("SELECT * FROM Task WHERE status = :status ORDER BY date ASC")
+    List<Task> getTasksByStatus(String status);
 
     @Query("DELETE FROM Task WHERE id = :taskId")
     void deleteById(int taskId);

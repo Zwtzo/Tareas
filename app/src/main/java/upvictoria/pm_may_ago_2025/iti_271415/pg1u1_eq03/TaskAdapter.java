@@ -64,6 +64,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 task.status = spinner.getSelectedItem().toString();
                 TaskDatabase.getInstance(context).taskDao().update(task);
                 notifyItemChanged(holder.getAdapterPosition());
+                ((MainActivity) context).refreshList();
             });
 
             builder.setNegativeButton("Cancelar", null);
