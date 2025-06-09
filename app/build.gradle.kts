@@ -32,9 +32,11 @@ android {
 }
 
 dependencies {
-    // ✅ Room para Java
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    // Calendario con exclusión del soporte antiguo
+    implementation("com.prolificinteractive:material-calendarview:1.4.3")
 
     implementation(libs.appcompat)
     implementation(libs.material)

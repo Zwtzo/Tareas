@@ -15,7 +15,6 @@ public interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertOrUpdate(Task task);
 
-
     @Insert
     void insert(Task task);
 
@@ -24,6 +23,9 @@ public interface TaskDao {
 
     @Update
     void update(Task task);
+
+    @Query("SELECT * FROM Task")
+    List<Task> getAllTasks();
 
     @Query("SELECT * FROM Task ORDER BY CASE WHEN status = 'Completada' THEN 1 ELSE 0 END, date ASC")
     List<Task> getAllTasksSorted();

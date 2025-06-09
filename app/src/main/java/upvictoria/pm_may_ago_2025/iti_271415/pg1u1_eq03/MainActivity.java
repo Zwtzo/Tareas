@@ -3,15 +3,16 @@ package upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -127,5 +128,25 @@ public class MainActivity extends AppCompatActivity {
         } else {
             aviso.setVisibility(TextView.GONE);
         }
+    }
+
+    // [[][][][][][][][][][][][][]]
+    // Calendar Functions
+    // [[][][][][][][][][][][][][]]
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull android.view.MenuItem item) {
+        if (item.getItemId() == R.id.action_calendar) {
+            Intent intent = new Intent(this, CalendarActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
