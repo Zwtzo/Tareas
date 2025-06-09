@@ -114,15 +114,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
     static class TaskViewHolder extends RecyclerView.ViewHolder {
-        TextView title, date, status;
-        ImageView deleteButton; // ← agregado
+        TextView title, description, date, status;
+        ImageView deleteButton; 
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.textTitle);
+            description = itemView.findViewById(R.id.textDescription);
             date = itemView.findViewById(R.id.textDate);
             status = itemView.findViewById(R.id.textStatus);
-            deleteButton = itemView.findViewById(R.id.deleteButton); // ← agregado
+            deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 }

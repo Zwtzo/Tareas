@@ -17,10 +17,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_toStartOf="@+id/deleteButton"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginEnd="40dp">
 
             <TextView
@@ -30,6 +26,15 @@
                 android:text="Título"
                 android:textStyle="bold"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Descripción"
+                android:textSize="14sp"
+                android:textColor="#444444"
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/textDate"
@@ -52,10 +57,9 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@android:drawable/ic_delete"
-            android:contentDescription="Eliminar"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
             android:clickable="true"
             android:focusable="true"
             app:tint="#FF0000" />
