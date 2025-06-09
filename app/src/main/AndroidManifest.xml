@@ -30,6 +30,9 @@
             android:exported="false" />
         <activity android:name=".SubjectFormActivity"
             android:exported="false" />
+
+        <activity android:name=".CalendarActivity" />
+
     </application>
 
 </manifest>

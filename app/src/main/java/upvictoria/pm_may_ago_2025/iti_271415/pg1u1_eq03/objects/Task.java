@@ -1,14 +1,10 @@
 package upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03.objects;
 
-import android.content.Context;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-
-import upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03.TaskDatabase;
 
 @Entity
 public class Task implements Serializable {
@@ -22,7 +18,7 @@ public class Task implements Serializable {
     public String description;
 
     @ColumnInfo(name = "date")
-    public String date; // formato sugerido: "yyyy-MM-dd HH:mm"
+    public String date;
 
     @ColumnInfo(name = "status")
     public String status; // "Iniciado", "En proceso", "Completado"

@@ -10,13 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.util.Calendar;
 import java.util.List;
-
 import upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03.objects.Subject;
 import upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03.objects.Task;
 
@@ -35,6 +33,8 @@ public class TaskFormActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        myToolbar.setNavigationOnClickListener(v -> finish());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         myToolbar.setTitle("Crear Tarea");
 
@@ -87,6 +87,20 @@ public class TaskFormActivity extends AppCompatActivity {
             );
             datePickerDialog.show();
         });
+
+        // Modo edición (tarea existente)
+        if (getIntent().hasExtra("task")) {
+            task = (Task) getIntent().getSerializableExtra("task");
+
+            titleInput.setText(task.title);
+            descriptionInput.setText(task.description);
+            dateInput.setText(task.date);
+            statusSpinner.setSelection(adapter.getPosition(task.status));
+
+            titleInput.setEnabled(false);
+            descriptionInput.setEnabled(true);
+            dateInput.setEnabled(true);
+        }
 
         // Botón guardar
         saveBtn.setOnClickListener(v -> {
