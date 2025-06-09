@@ -61,14 +61,41 @@
             android:text="Completados" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
+    <LinearLayout
+        android:id="@+id/layoutOrden"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toggleGroup"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12.dp"
+            android:text="Ver Materia:" />
+        <Spinner
+            android:id="@+id/spinnerMaterias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMaterias"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10.dp"
+            android:text="Editar Materias"
+            android:textSize="10.sp" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/aviso"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No hay tareas"
-        android:layout_below="@id/toggleGroup"
+        android:layout_below="@id/layoutOrden"
         android:layout_above="@+id/fabAddTask"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -76,7 +103,7 @@
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toggleGroup"
+        android:layout_below="@id/layoutOrden"
         android:layout_above="@+id/fabAddTask"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

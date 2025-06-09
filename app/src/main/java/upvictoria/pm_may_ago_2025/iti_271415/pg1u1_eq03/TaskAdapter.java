@@ -12,7 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.BreakIterator;
 import java.util.List;
+
+import upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03.objects.Task;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
     private final List<Task> taskList;
@@ -35,6 +38,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Task task = taskList.get(position);
         holder.title.setText(task.title);
         holder.date.setText(task.date);
+        holder.subject.setText(task.subject);
         holder.status.setText(task.status);
 
         holder.itemView.setOnClickListener(v -> {
@@ -78,13 +82,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
     static class TaskViewHolder extends RecyclerView.ViewHolder {
-        TextView title, date, status;
+        TextView title, date, status, subject;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.textTitle);
             date = itemView.findViewById(R.id.textDate);
             status = itemView.findViewById(R.id.textStatus);
+            subject = itemView.findViewById(R.id.textSubject);
         }
     }
 }

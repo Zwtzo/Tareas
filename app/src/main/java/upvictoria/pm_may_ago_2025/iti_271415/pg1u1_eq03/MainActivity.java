@@ -1,7 +1,12 @@
 package upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +19,9 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.List;
 
+import upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03.objects.Subject;
+import upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03.objects.Task;
+
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
@@ -22,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton btnPendientes;
     private MaterialButton btnEnProceso;
     private MaterialButton btnCompletados;
-
+    private Spinner subjectSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +42,60 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         myToolbar.setTitle("Task Manager");
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         // botones del filtro
         btnTodos = findViewById(R.id.btnTodos);
         btnTodos.setChecked(true);
         btnPendientes = findViewById(R.id.btnPendientes);
         btnEnProceso = findViewById(R.id.btnProgreso);
         btnCompletados = findViewById(R.id.btnCompletados);
+        subjectSpinner = findViewById(R.id.spinnerMaterias);
 
         // Obtener la lista de tareas ordenada por fecha
         taskList = TaskDatabase.getInstance(this).taskDao().getAllTasksSorted();
-
         taskAdapter = new TaskAdapter(taskList, this);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
 
-        findViewById(R.id.fabAddTask).setOnClickListener(view -> {
-            startActivity(new Intent(MainActivity.this, TaskFormActivity.class));
+        // poner materias en el spinner
+        Subject todas = new Subject("Todas");
+        List<Subject> subjects = TaskDatabase.getInstance(this).subjectDao().getAllSubjectsSorted();
+        subjects.add(0, todas); // Agregar "Todas" al inicio de la lista
+
+        ArrayAdapter<Subject> subjectAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, subjects);
+        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(subjectAdapter);
+
+        // accion de cambio del spinner de materias
+        subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedSubject = parent.getItemAtPosition(position).toString();
+                MaterialButtonToggleGroup toggleGroup = findViewById(R.id.toggleGroup);
+                int buttonId = toggleGroup.getCheckedButtonId();
+
+                if (buttonId == R.id.btnTodos) {
+                    showTodas();
+                } else if (buttonId == R.id.btnPendientes) {
+                    showPendientes();
+                } else if (buttonId == R.id.btnProgreso) {
+                    showEnProgreso();
+                } else if (buttonId == R.id.btnCompletados) {
+                    showCompletadas();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        // acciones de los botones
+        findViewById(R.id.fabAddTask).setOnClickListener(view ->
+                startActivity(new Intent(MainActivity.this, TaskFormActivity.class)));
+
+        findViewById(R.id.btnMaterias).setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, SubjectFormActivity.class)));
 
         showTodas();
 
@@ -63,62 +106,100 @@ public class MainActivity extends AppCompatActivity {
         btnCompletados.setOnClickListener(v -> showCompletadas());
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onResume() {
         super.onResume();
         // Recargar la lista cuando se vuelve a la actividad
-        taskList.clear();
-        taskList.addAll(TaskDatabase.getInstance(this).taskDao().getAllTasksSorted());
-        taskAdapter.notifyDataSetChanged();
+        refreshList();
+        Subject todas = new Subject("Todas");
+        List<Subject> subjects = TaskDatabase.getInstance(this).subjectDao().getAllSubjectsSorted();
+        subjects.add(0, todas); // Agregar "Todas" al inicio de la lista
+
+        ArrayAdapter<Subject> subjectAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, subjects);
+        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(subjectAdapter);
     }
 
     public void refreshList() {
-        MaterialButtonToggleGroup btnGroup = findViewById(R.id.toggleGroup);
-        switch (btnGroup.getCheckedButtonId()){
-            case 0:
-                showTodas();
-                break;
-            case 1:
-                showPendientes();
-                break;
-            case 2:
-                showEnProgreso();
-                break;
-            case 3:
-                showCompletadas();
-                break;
+        String selectedSubject = subjectSpinner.getSelectedItem().toString();
+        if (selectedSubject.equals("Todas")) {
+            showTodas();
+        } else {
+            // Filtrar tareas por materia seleccionada
+            taskList.clear();
+            taskList.addAll(TaskDatabase.getInstance(MainActivity.this).taskDao().getAllSubjectTasks(selectedSubject));
+            taskAdapter.notifyDataSetChanged();
+            showAviso(taskList.size(), "");
         }
     }
 
     // BTN ACCIONES
+    @SuppressLint("NotifyDataSetChanged")
     public void showTodas() {
         taskList.clear();
-        taskList.addAll(TaskDatabase.getInstance(this).taskDao().getAllTasksSorted());
+
+        String selectedSubject = subjectSpinner.getSelectedItem().toString();
+
+        if (selectedSubject.equals("Todas")) {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getAllTasksSorted());
+        } else {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getAllSubjectTasks(selectedSubject));
+        }
+
         taskAdapter.notifyDataSetChanged();
         showAviso(taskList.size(), "");
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void showPendientes() {
         taskList.clear();
-        taskList.addAll(TaskDatabase.getInstance(this).taskDao().getTasksByStatus("Pendiente"));
+
+        String selectedSubject = subjectSpinner.getSelectedItem().toString();
+
+        if (selectedSubject.equals("Todas")) {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getAllTasksByStatus("Pendiente"));
+        } else {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getSubjectTasksByStatus(selectedSubject, "Pendiente"));
+        }
+
         taskAdapter.notifyDataSetChanged();
         showAviso(taskList.size(), "pendientes");
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void showEnProgreso() {
         taskList.clear();
-        taskList.addAll(TaskDatabase.getInstance(this).taskDao().getTasksByStatus("En progreso"));
+
+        String selectedSubject = subjectSpinner.getSelectedItem().toString();
+
+        if (selectedSubject.equals("Todas")) {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getAllTasksByStatus("En progreso"));
+        } else {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getSubjectTasksByStatus(selectedSubject, "En progreso"));
+        }
+
         taskAdapter.notifyDataSetChanged();
         showAviso(taskList.size(), "en progreso");
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void showCompletadas() {
         taskList.clear();
-        taskList.addAll(TaskDatabase.getInstance(this).taskDao().getTasksByStatus("Completada"));
+
+        String selectedSubject = subjectSpinner.getSelectedItem().toString();
+
+        if (selectedSubject.equals("Todas")) {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getAllTasksByStatus("Completada"));
+        } else {
+            taskList.addAll(TaskDatabase.getInstance(this).taskDao().getSubjectTasksByStatus(selectedSubject, "Completada"));
+        }
         taskAdapter.notifyDataSetChanged();
         showAviso(taskList.size(), "completadas");
     }
 
+    @SuppressLint("SetTextI18n")
     public void showAviso(int size, String sufix) {
         TextView aviso = findViewById(R.id.aviso);
         if (size == 0) {
