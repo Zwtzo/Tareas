@@ -1,6 +1,7 @@
 package upvictoria.pm_may_ago_2025.iti_271415.pg1u1_eq03;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -17,6 +18,9 @@ public interface TaskDao {
 
     @Insert
     void insert(Task task);
+
+    @Delete
+    void delete(Task task);
 
     @Update
     void update(Task task);

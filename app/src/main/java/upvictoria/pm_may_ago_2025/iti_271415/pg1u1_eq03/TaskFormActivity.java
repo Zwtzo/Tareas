@@ -26,6 +26,8 @@ public class TaskFormActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        myToolbar.setNavigationOnClickListener(v -> finish());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         myToolbar.setTitle("Crear Tarea");
 
@@ -68,10 +70,9 @@ public class TaskFormActivity extends AppCompatActivity {
             dateInput.setText(task.date);
             statusSpinner.setSelection(adapter.getPosition(task.status));
 
-            // 🔒 Bloquear edición de título, descripción y fecha
             titleInput.setEnabled(false);
-            descriptionInput.setEnabled(false);
-            dateInput.setEnabled(false);
+            descriptionInput.setEnabled(true);
+            dateInput.setEnabled(true);
         }
 
         // Botón guardar
