@@ -42,6 +42,7 @@ public class SubjectFormActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // tampoco aquí
+                // apoco no
             }
 
             @Override
