@@ -55,6 +55,8 @@ public class SubjectFormActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        myToolbar.setNavigationOnClickListener(v -> finish());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         myToolbar.setTitle("Materias");
 
